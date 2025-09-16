@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Emmanuel Ahishakiye</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#04060a" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#04060a;
+      --bg2:#07111c;
+      --card:#0a1220;
+      --glass:rgba(255,255,255,.06);
+      --text:#dfe7f5;
+      --muted:#9fb0cf;
+      --brand:#6aa7ff;
+      --brand2:#8e79ff;
+      --accent:#10e0ff;
+      --ring:rgba(106,167,255,.55);
+      --shadow:0 14px 44px rgba(0,0,0,.35);
+      --radius:18px;
+      --wrap:1200px;
+    }
+    /* Light theme variables */
+    :root.light{
+      --bg:#f8fbff;
+      --bg2:#eef3ff;
+      --card:#ffffff;
+      --glass:rgba(0,0,0,.08);
+      --text:#0c1a2e;
+      --muted:#3c4d6a;
+      --brand:#245ce0;
+      --brand2:#6b35ff;
+      --accent:#0aa3c2;
+      --ring:rgba(36,92,224,.45);
+      --shadow:0 12px 34px rgba(0,0,0,.10);
+    }
+    *{box-sizing:border-box}
+    html:focus-within{scroll-behavior:smooth}
+    body{
+      margin:0; color:var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial;
+      line-height:1.6;
+      background:
+        radial-gradient(1000px 700px at 10% -10%, rgba(106,167,255,.15), transparent 60%),
+        radial-gradient(1200px 800px at 110% 10%, rgba(142,121,255,.15), transparent 60%),
+        radial-gradient(1400px 900px at 50% 120%, rgba(16,224,255,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow-x:hidden;
+    }
+    /* Background canvases */
+    canvas#stars, canvas#waves{position:fixed;inset:0;pointer-events:none;z-index:0}
+    canvas#waves{mix-blend-mode:screen;opacity:.25}
+
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .section{max-width:var(--wrap);margin:0 auto;padding:28px 18px;position:relative;z-index:1}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+          border:1px solid var(--glass);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+    header{
+      position:sticky;top:0;z-index:3; transform:translateY(0); transition:transform .25s ease;
+      backdrop-filter:blur(10px) saturate(140%); background:linear-gradient(90deg, rgba(4,6,10,.85), rgba(6,11,18,.65));
+      border-bottom:1px solid var(--glass)
+    }
+    :root.light header{background:linear-gradient(90deg, rgba(248,251,255,.85), rgba(238,243,255,.8))}
+    .nav{max-width:var(--wrap);margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    #logo{margin:0;color:#fff;font-weight:800;letter-spacing:.2px;display:flex;gap:10px;align-items:center}
+    :root.light #logo{color:#0c1a2e}
+    nav ul{display:flex;gap:18px;list-style:none;margin:0;padding:0}
+    nav a{display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:12px;color:#eaf1ff}
+    :root.light nav a{color:#0c1a2e}
+    nav a:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+    .menu-toggle{display:none}
+
+    /* hero */
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:center}
+    .title{font-weight:900;line-height:1.08;margin:.4rem 0;font-size:clamp(30px,5vw,52px);color:#fff}
+    :root.light .title{color:#0c1a2e}
+    .lead{color:var(--muted);font-size:clamp(15px,1.6vw,18px);margin:0 0 18px}
+    .badge{display:inline-flex;gap:8px;align-items:center;background:linear-gradient(135deg, rgba(106,167,255,.25), rgba(16,224,255,.18));padding:8px 12px;border-radius:999px;border:1px solid var(--glass)}
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;border:1px solid var(--glass);
+         background:linear-gradient(180deg, rgba(142,121,255,.22), rgba(106,167,255,.22));color:#fff;box-shadow:var(--shadow)}
+    .btn.secondary{background:transparent}
+    .btn:hover{transform:translateY(-1px)}
+
+    .hero-side{display:grid;grid-template-columns:84px 1fr;gap:14px}
+    .pfp{width:84px;height:84px;border-radius:18px;object-fit:cover;border:2px solid var(--glass)}
+    .quick{display:grid;gap:8px}
+
+    /* social wall */
+    .social-wall{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .social-embed{min-height:360px;overflow:hidden}
+
+    /* companies */
+    .grid{display:grid;gap:14px;grid-template-columns:repeat(3,1fr)}
+    .tile{padding:16px;border-radius:16px;transition:transform .25s ease, box-shadow .25s ease}
+    .tile:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.25)}
+    .tile h3{margin:0 0 6px;color:#fff}
+    :root.light .tile h3{color:#0c1a2e}
+    .tile p{margin:0;color:var(--muted)}
+
+    /* resume */
+    #resume-section h2{display:flex;align-items:center;gap:10px;margin:0 0 12px;color:#fff}
+    :root.light #resume-section h2{color:#0c1a2e}
+    .resume-container{display:grid;grid-template-columns:52px 1fr;gap:16px}
+    .rail{position:sticky;top:86px;height:fit-content;display:grid;place-items:center;gap:10px}
+    .rail button{width:46px;height:46px;border:0;border-radius:14px;background:#121b27;color:#d7e2f5;cursor:pointer;box-shadow:var(--shadow)}
+    :root.light .rail button{background:#e9f0ff;color:#0c1a2e}
+    .rail .track{width:6px;height:170px;border-radius:6px;background:#1b2536;position:relative}
+    :root.light .rail .track{background:#c9d7ff}
+    .rail .thumb{position:absolute;top:0;left:0;width:6px;height:32px;border-radius:6px;background:#9bb4ff}
+    .resume-content{padding:20px;border-radius:var(--radius);max-height:70vh;overflow:auto;scrollbar-width:thin;position:relative}
+    .resume-content::-webkit-scrollbar{width:10px}
+    .resume-content::-webkit-scrollbar-thumb{background:#223149;border-radius:10px}
+    .name{display:flex;align-items:center;gap:10px;font-size:clamp(22px,2.2vw,28px);margin:0 0 6px}
+    #resume-section h3{display:flex;align-items:center;gap:10px;margin:14px 0 8px;font-size:clamp(18px,2.2vw,22px);color:#eaf1ff}
+    :root.light #resume-section h3{color:#0c1a2e}
+    #resume-section ul{margin:8px 0 0 0;padding-left:20px}
+    #resume-section li{margin:6px 0}
+
+    /* lab */
+    .lab-toggle{position:fixed;top:50%;right:14px;transform:translateY(-50%);z-index:4;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border:0;border-radius:12px;padding:10px;cursor:pointer;box-shadow:var(--shadow)}
+    .lab{position:fixed;top:0;right:0;height:100vh;width:min(480px,96vw);transform:translateX(100%);transition:transform .28s ease;z-index:4;
+         background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));backdrop-filter:blur(12px);
+         border-left:1px solid var(--glass);box-shadow:-14px 0 40px rgba(0,0,0,.35)}
+    :root.light .lab{background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.82))}
+    .lab.open{transform:translateX(0)}
+    .lab-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--glass)}
+    .tabs{display:flex;gap:8px;padding:10px 12px;border-bottom:1px solid var(--glass);flex-wrap:wrap}
+    .tab{padding:8px 12px;border-radius:10px;cursor:pointer;background:#101a20;border:1px solid var(--glass)}
+    :root.light .tab{background:#eef3ff}
+    .tab.active{outline:2px solid var(--ring)}
+    .pane{padding:12px;overflow:auto;display:none;height:calc(100vh - 54px - 44px - 48px)}
+    .pane.active{display:block}
+    .input,.textarea{width:100%;background:#0f1722;color:#e6edfa;border:1px solid var(--glass);border-radius:12px;padding:10px}
+    :root.light .input,:root.light .textarea{background:#ffffff;color:#0c1a2e}
+    .note{background:#0f1722;border:1px solid var(--glass);border-radius:12px;padding:10px;margin:8px 0}
+    :root.light .note{background:#ffffff;border-color:#dfe7ff}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#101a20;border:1px solid var(--glass);cursor:pointer}
+    :root.light .pill{background:#eef3ff}
+
+    /* controls and progress */
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+    .btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:#111a26;color:#e6edfa;border:1px solid var(--glass);cursor:pointer}
+    :root.light .btn-ghost{background:#eef3ff;color:#0c1a2e}
+    .progress{position:fixed;left:0;top:0;height:3px;background:linear-gradient(90deg,var(--brand),var(--brand2));width:0%;z-index:5}
+
+    /* floating buttons */
+    .to-top,.theme{position:fixed;right:16px;z-index:4;width:44px;height:44px;border-radius:50%;border:0;display:grid;place-items:center;box-shadow:var(--shadow);cursor:pointer}
+    .to-top{bottom:90px;background:#172132;color:#e6edfa;display:none}
+    :root.light .to-top{background:#e6efff;color:#0c1a2e}
+    .theme{bottom:36px;background:#1abc9c;color:#fff}
+
+    /* footer */
+    #footer{margin-top:26px;padding:20px 0;border-top:1px solid var(--glass)}
+    .foot{max-width:var(--wrap);margin:0 auto;padding:0 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .icons{display:flex;gap:12px}
+    .icon{width:40px;height:40px;border-radius:12px;display:inline-grid;place-items:center;background:#111a26;color:#e6edfa;border:1px solid var(--glass)}
+    :root.light .icon{background:#eef3ff;color:#0c1a2e}
+
+    /* responsive */
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .social-wall{grid-template-columns:1fr}
+      .resume-container{grid-template-columns:1fr}
+      .rail{display:none}
+      .grid{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 560px){
+      nav ul{display:none}
+      .menu-toggle{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid var(--glass);background:#121826;color:#e6edfa}
+      :root.light .menu-toggle{background:#eef3ff;color:#0c1a2e}
+      .grid{grid-template-columns:1fr}
+      .title{font-size:clamp(28px,8vw,40px)}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="waves"></canvas>
+  <canvas id="stars"></canvas>
+
+  <header>
+    <div class="nav">
+      <h1 id="logo"><i class="fas fa-user-tie"></i> Emmanuel</h1>
+      <button class="menu-toggle"><i class="fas fa-bars"></i> Menu</button>
+      <nav>
+        <ul id="menu">
+          <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="#resume-section"><i class="fas fa-file-alt"></i> Resume</a></li>
+          <li><a href="#companies"><i class="fas fa-building"></i> Companies</a></li>
+          <li><a href="#social"><i class="fas fa-hashtag"></i> Social</a></li>
+          <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="home" class="section">
+      <div class="hero">
+        <div>
+          <span class="badge"><i class="fas fa-bolt"></i> Builder • Product • Platforms</span>
+          <h2 class="title">Emmanuel Ahishakiye</h2>
+          <p class="lead">
+            Founder,  <b>Jackal Tech Ltd</b>. Undergraduate at the <b>University of Rochester</b> in Computer Science and Business. I like simple ideas built with care and shipped.
+          </p>
+          <div class="cta-row">
+            <a class="btn" href="https://calendly.com/eahishak" target="_blank" rel="noopener"><i class="far fa-calendar-check"></i> Schedule</a>
+            <a class="btn secondary" href="#companies"><i class="fas fa-diagram-project"></i> What I build</a>
+            <button class="btn" id="openLab"><i class="fas fa-wand-magic-sparkles"></i> Magic lab</button>
+          </div>
+        </div>
+        
+        <div class="hero-side">
+          <img class="pfp" src="img/home/4.jpg" alt="Emmanuel portrait" />
+          <div class="quick card" style="padding:14px">
+            <strong>Quick links</strong>
+            <a href="#resume-section">Resume</a>
+            <a href="#companies">Companies and products</a>
+            <a href="#social">Threads and posts</a>
+            <a href="#contact">Message me</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Social wall -->
+    <section id="social" class="section">
+      <h2 style="margin:0 0 12px;display:flex;align-items:center;gap:10px"><i class="fas fa-hashtag"></i> Threads and posts</h2>
+      <div class="social-wall">
+        <div class="social-embed card" style="padding:0">
+          <!-- Twitter timeline -->
+          <a class="twitter-timeline" data-height="420" href="https://twitter.com/ema__vx">Tweets by Emmanuel</a>
+        </div>
+        <div class="social-embed card" style="padding:12px">
+          <!-- LinkedIn badge -->
+          <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="light" data-type="VERTICAL" data-vanity="eahishak" data-version="v1">
+            <a class="badge-base__link LI-simple-link" href="https://www.linkedin.com/in/eahishak/">LinkedIn</a>
+          </div>
+        </div>
+        <div class="social-embed card" style="padding:12px">
+          <!-- Instagram embed sample post placeholder -->
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/Cx0oXz8s1xU/" data-instgrm-version="14" style="margin:auto;"></blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Companies -->
+    <section id="companies" class="section">
+      <h2 style="margin:0 0 12px;display:flex;align-items:center;gap:10px"><i class="fas fa-building"></i> Companies and products</h2>
+      <div class="grid">
+        <div class="tile card">
+          <h3><i class="fas fa-paw"></i> Jackal Tech Ltd</h3>
+          <p>We build software and training programs for schools, teams, and communities. Focus on clear value and dependable delivery.</p>
+          <p style="margin-top:8px"><a href="https://www.jackaltechltd.com" target="_blank" rel="noopener"><i class="fas fa-globe"></i> jackaltechltd.com</a></p>
+        </div>
+        <div class="tile card">
+          <h3><i class="fas fa-box-open"></i> Foundly</h3>
+          <p>Platform for lost and found across campuses and offices. Smart matching, instant notices, and clean dashboards for staff and users.</p>
+          <p style="margin-top:8px"><a href="https://foundlyhq.com/" id="foundlyLink" target="_blank" rel="noopener"><i class="fas fa-link"></i> foundlyhq.com</a></p>
+        </div>
+        <div class="tile card">
+          <h3><i class="fas fa-flask"></i> Game studio</h3>
+          <p>Open Magic lab and pick a game. Guess, match, speed test, reaction, and more for short breaks.</p>
+          <button class="btn-ghost" id="openLab2"><i class="fas fa-wand-magic-sparkles"></i> Open magic lab</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resume -->
+    <section id="resume-section" class="section">
+      <h2><i class="fas fa-file-alt"></i> Resume</h2>
+      <div class="resume-container">
+        <aside class="rail" aria-hidden="true">
+          <button id="scroll-up" title="Scroll up"><i class="fas fa-chevron-up"></i></button>
+          <div class="track"><div class="thumb"></div></div>
+          <button id="scroll-down" title="Scroll down"><i class="fas fa-chevron-down"></i></button>
+        </aside>
+
+        <div class="resume-content card" tabindex="0" id="resume">
+          <p class="name"><i class="fas fa-user-circle"></i><strong>Emmanuel Ahishakiye</strong></p>
+          <p>
+            <a href="mailto:eahishak@u.rochester.edu"><i class="fas fa-envelope"></i> eahishak@u.rochester.edu</a> •
+            <a href="tel:+15856237660"><i class="fas fa-phone"></i> (585) 623 7660</a> •
+            <a href="https://www.eahishakiye.com" target="_blank" rel="noopener"><i class="fas fa-globe"></i> eahishakiye.com</a> •
+            <a href="https://linkedin.com/in/eahishak/" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a> •
+            <a href="https://github.com/eahishak" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+          </p>
+
+          <section>
+            <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+            <p><b>University of Rochester</b>, Rochester NY</p>
+            <p>Bachelor of Science in Computer Science and Business Finance, Anticipated May 2027</p>
+            <p><b>Relevant coursework:</b> Data Structures and Algorithms, Artificial Intelligence, Human Computer Interaction, Formal Systems, Discrete Math, Financial Accounting, Statistical Methodology</p>
+          </section>
+
+          <section>
+            <h3><i class="fas fa-tools"></i> Skills</h3>
+            <ul>
+              <li><b>Languages</b> Python, Java, C plus plus, JavaScript, TypeScript</li>
+              <li><b>Frameworks</b> React, Django, Node.js, FastAPI</li>
+              <li><b>Cloud and tools</b> AWS, Firebase, Git</li>
+              <li><b>Databases</b> PostgreSQL, MySQL, Supabase</li>
+              <li><b>Systems</b> TensorFlow, model deployment</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3><i class="fas fa-briefcase"></i> Work experience</h3>
+
+            <article>
+              <p><b>Foundly</b>, Rochester NY</p>
+              <p>Software Developer, January 2025 to present</p>
+              <ul>
+                <li>Platform for lost and found used by more than fifteen thousand users</li>
+                <li>Full stack modules in React and Node.js with Firebase and dashboards</li>
+                <li>Secure multi role sign in with Google and institutional email logic</li>
+                <li>Maps search and geolocation improving match rates by sixty five percent</li>
+                <li>Item matching with Python and TensorFlow cutting search time by fifty percent</li>
+                <li>Alerts and dashboards that reduce manual work by seventy percent</li>
+              </ul>
+            </article>
+
+            <article>
+              <p><b>Cendance Systems Inc</b> Remote, New York NY</p>
+              <p>Salesforce Software Engineer Intern, December 2024 to May 2025</p>
+              <ul>
+                <li>Services that improved sales forecast accuracy by thirty five percent</li>
+                <li>Internal tools in React with better flows and engagement</li>
+              </ul>
+            </article>
+
+            <article>
+              <p><b>Jackal Tech Ltd</b> Remote, New York NY</p>
+              <p>Founder and Product Lead part time, November 2021 to present</p>
+              <ul>
+                <li>Six full stack products in health, education, and civic tech</li>
+                <li>Scalable back ends in Django and Node.js with faster handling</li>
+                <li>Chat features on client platforms with quicker response</li>
+                <li>Mentored students through build sprints and live collaboration</li>
+              </ul>
+            </article>
+
+            <article>
+              <p><b>Headstarter</b>, San Francisco CA</p>
+              <p>Software Engineer Fellow, June 2024 to October 2024</p>
+              <ul>
+                <li>Sign in systems and chat features with Python and React</li>
+                <li>Better deployment flows with improved reliability and speed</li>
+              </ul>
+            </article>
+          </section>
+
+          <section>
+            <h3><i class="fas fa-star"></i> Leadership and activities</h3>
+            <ul>
+              <li>Debate Union</li>
+              <li>National Society of Black Engineers</li>
+              <li>University of Rochester Game Dev Team</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3><i class="fas fa-trophy"></i> Honors and awards</h3>
+            <ul>
+              <li>Handler Premier Scholar top one percent</li>
+              <li>Global hackathon finalist two thousand twenty two top six of more than five hundred teams</li>
+              <li>Python certification Carnegie Mellon University CS Academy advanced track</li>
+              <li>Fellow Code two zero four zero, ColorStack, and MLT</li>
+            </ul>
+          </section>
+
+          <div class="controls">
+            <button class="btn-ghost" id="download-resume"><i class="fas fa-download"></i> Download</button>
+            <button class="btn-ghost" id="start"><i class="fas fa-play"></i> Start</button>
+            <button class="btn-ghost" id="pause"><i class="fas fa-pause"></i> Pause</button>
+            <button class="btn-ghost" id="resumeBtn"><i class="fas fa-redo"></i> Resume</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <h2 style="display:flex;align-items:center;gap:10px"><i class="fas fa-envelope"></i> Send a message</h2>
+      <div class="card" style="padding:18px">
+        <form id="contact-form" novalidate>
+          <label for="name"><i class="fas fa-user"></i> Name</label>
+          <input class="input" type="text" id="name" name="name" placeholder="Your name" required />
+
+          <label for="email"><i class="fas fa-envelope"></i> Email</label>
+          <input class="input" type="email" id="email" name="email" placeholder="you@example.com" required inputmode="email" />
+
+          <label for="message"><i class="fas fa-comment"></i> Message</label>
+          <textarea class="textarea" id="message" name="message" placeholder="Write your message..." rows="4" required></textarea>
+
+          <button class="btn-ghost" type="submit"><i class="fas fa-paper-plane"></i> Send</button>
+        </form>
+        <div id="thanks" class="note" style="display:none;margin-top:12px">
+          <p><i class="fas fa-check-circle"></i> Thank you for reaching out. A copy was sent to your mail app, and I will reply soon.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer">
+    <div class="foot">
+      <div class="icons">
+        <a href="mailto:eahishak@u.rochester.edu" class="icon" title="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/eahishak/" class="icon" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/eahishak" class="icon" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://www.jackaltechltd.com" class="icon" target="_blank" rel="noopener" title="Jackal Tech"><i class="fas fa-globe"></i></a>
+        <a href="https://www.foundlyhq.com" class="icon" target="_blank" rel="noopener" title="Foundly"><i class="fas fa-box-open"></i></a>
+      </div>
+      <strong><p style="margin:0;color:#b9c7e4">© 2025 Emmanuel. All rights reserved.</p></strong>
+    </div>
+  </footer>
+
+  <!-- floating buttons and progress -->
+  <button class="to-top" aria-label="Scroll to top"><i class="fas fa-arrow-up"></i></button>
+  <button class="theme" aria-label="Change theme" id="themeToggle"><i class="fas fa-moon"></i></button>
+  <div class="progress" id="progress"></div>
+
+  <!-- Magic Lab -->
+  <button class="lab-toggle" id="labToggle" aria-label="Magic lab"><i class="fas fa-wand-magic-sparkles"></i></button>
+  <aside class="lab" id="lab">
+    <div class="lab-head">
+      <strong>Magic lab</strong>
+      <div>
+        <button class="btn-ghost" id="labClose"><i class="fas fa-xmark"></i></button>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="helper"><i class="fas fa-sparkles"></i> Helper</button>
+      <button class="tab" data-tab="about"><i class="fas fa-user"></i> About me</button>
+      <button class="tab" data-tab="company"><i class="fas fa-building"></i> Company chat</button>
+      <button class="tab" data-tab="games"><i class="fas fa-gamepad"></i> Game studio</button>
+      <button class="tab" data-tab="tools"><i class="fas fa-screwdriver-wrench"></i> Tools</button>
+    </div>
+
+    <!-- Helper -->
+    <div class="pane active" id="pane-helper">
+      <div style="display:grid;gap:8px">
+        <textarea class="textarea" id="helperInput" rows="4" placeholder="Ask for a short pitch or a summary"></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="pill" data-action="pitch"><i class="fas fa-bullhorn"></i> One line pitch</button>
+          <button class="pill" data-action="summary"><i class="fas fa-paragraph"></i> Summarize resume</button>
+          <button class="pill" data-action="keywords"><i class="fas fa-tags"></i> Top keywords</button>
+          <button class="pill" data-action="copy"><i class="fas fa-copy"></i> Copy contact</button>
+          <button class="pill" data-action="read"><i class="fas fa-headphones"></i> Read aloud</button>
+        </div>
+        <div id="helperOut" class="note" style="min-height:80px"></div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="pane" id="pane-about">
+      <div class="note">Who am I</div>
+      <div id="aboutOut" class="note"></div>
+      <button class="btn-ghost" id="aboutRefresh"><i class="fas fa-rotate"></i> Refresh</button>
+    </div>
+
+    <!-- Company chat -->
+    <div class="pane" id="pane-company">
+      <div style="display:grid;gap:8px">
+        <div class="note">Ask about Jackal Tech, Foundly, or Emmanuel</div>
+        <div id="chatLog" class="note" style="max-height:220px;overflow:auto"></div>
+        <div style="display:flex;gap:8px">
+          <input class="input" id="chatInput" placeholder="Type a question" />
+          <button class="btn-ghost" id="chatSend"><i class="fas fa-paper-plane"></i> Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game studio with 6 games -->
+    <div class="pane" id="pane-games">
+      <div style="display:grid;gap:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="pill" data-g="guessWord">Guess word</button>
+          <button class="pill" data-g="number">Number guess</button>
+          <button class="pill" data-g="rps">Rock paper scissors</button>
+          <button class="pill" data-g="tic">Tic tac toe</button>
+          <button class="pill" data-g="memory">Memory match</button>
+          <button class="pill" data-g="reaction">Reaction time</button>
+          <button class="pill" data-g="typing">Typing speed</button>
+        </div>
+
+        <!-- Guess word -->
+        <div class="card" id="game-guessWord" style="padding:12px;display:none">
+          <strong>Guess word</strong>
+          <div id="gwOut" class="note"></div>
+          <input class="input" id="gwIn" placeholder="Type a guess and enter" />
+          <button class="btn-ghost" id="gwNew"><i class="fas fa-shuffle"></i> New word</button>
+        </div>
+
+        <!-- Number guess -->
+        <div class="card" id="game-number" style="padding:12px;display:none">
+          <strong>Number guess</strong>
+          <div id="numOut" class="note"></div>
+          <input class="input" id="numIn" placeholder="Pick 1 to 100 and enter" inputmode="numeric" />
+          <button class="btn-ghost" id="numNew"><i class="fas fa-shuffle"></i> New round</button>
+        </div>
+
+        <!-- RPS -->
+        <div class="card" id="game-rps" style="padding:12px;display:none">
+          <strong>Rock paper scissors</strong>
+          <div id="rpsOut" class="note"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn-ghost" data-move="rock">Rock</button>
+            <button class="btn-ghost" data-move="paper">Paper</button>
+            <button class="btn-ghost" data-move="scissors">Scissors</button>
+          </div>
+        </div>
+
+        <!-- Tic tac toe -->
+        <div class="card" id="game-tic" style="padding:12px;display:none">
+          <strong>Tic tac toe</strong>
+          <div id="ticBoard" style="display:grid;grid-template-columns:repeat(3,64px);gap:6px;margin:10px 0"></div>
+          <div id="ticOut" class="note"></div>
+          <button class="btn-ghost" id="ticNew"><i class="fas fa-rotate"></i> New game</button>
+        </div>
+
+        <!-- Memory match -->
+        <div class="card" id="game-memory" style="padding:12px;display:none">
+          <strong>Memory match</strong>
+          <div id="memBoard" style="display:grid;grid-template-columns:repeat(6,48px);gap:8px;margin:10px 0"></div>
+          <div id="memOut" class="note"></div>
+          <button class="btn-ghost" id="memNew"><i class="fas fa-rotate"></i> New game</button>
+        </div>
+
+        <!-- Reaction time -->
+        <div class="card" id="game-reaction" style="padding:12px;display:none">
+          <strong>Reaction time</strong>
+          <div id="reactArea" class="note" style="height:120px;display:grid;place-items:center;cursor:pointer">Click when it turns green</div>
+          <div id="reactOut" class="note"></div>
+          <button class="btn-ghost" id="reactNew"><i class="fas fa-rotate"></i> New round</button>
+        </div>
+
+        <!-- Typing speed -->
+        <div class="card" id="game-typing" style="padding:12px;display:none">
+          <strong>Typing speed</strong>
+          <div id="typePrompt" class="note"></div>
+          <input class="input" id="typeIn" placeholder="Type here and press enter" />
+          <div id="typeOut" class="note"></div>
+          <button class="btn-ghost" id="typeNew"><i class="fas fa-rotate"></i> New sentence</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tools -->
+    <div class="pane" id="pane-tools">
+      <div style="display:grid;gap:10px">
+        <button class="btn-ghost" id="printPdf"><i class="fas fa-file-export"></i> Print or save as PDF</button>
+        <button class="btn-ghost" id="voice"><i class="fas fa-microphone"></i> Voice control</button>
+        <button class="btn-ghost" id="offline"><i class="fas fa-cloud-arrow-down"></i> Offline cache</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Social scripts -->
+  <script async src="https://platform.twitter.com/widgets.js"></script>
+  <script async src="https://platform.linkedin.com/badges/js/profile.js" defer></script>
+  <script async src="https://www.instagram.com/embed.js"></script>
+
+  <script>
+    // helpers
+    const $=(s,c=document)=>c.querySelector(s); const $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
+
+    // theme toggle true light or dark
+    const themeToggle=$('#themeToggle');
+    const applyTheme=(mode)=>{ document.documentElement.classList.toggle('light', mode==='light'); themeToggle.innerHTML = mode==='light' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; localStorage.setItem('theme-mode', mode); };
+    (()=>{const saved=localStorage.getItem('theme-mode')||'dark'; applyTheme(saved);})();
+    themeToggle.addEventListener('click',()=>{const cur=document.documentElement.classList.contains('light')?'light':'dark'; applyTheme(cur==='light'?'dark':'light');});
+
+    // sticky header hide on scroll
+    (()=>{let last=scrollY;addEventListener('scroll',()=>{const h=$('header');if(!h)return;h.style.transform=scrollY>last?'translateY(-100%)':'translateY(0)';last=scrollY;},{passive:true});})();
+
+    // mobile menu
+    (()=>{const t=$('.menu-toggle'), m=$('#menu'); if(!t||!m) return;
+      t.addEventListener('click',()=>{m.style.display=m.style.display==='flex'?'none':'flex'; m.style.flexDirection='column'; m.style.gap='10px';});
+      $$('#menu a').forEach(a=>a.addEventListener('click',()=>{if(innerWidth<=560){m.style.display='none';}}));
+    })();
+
+    // smooth nav
+    $$('nav a').forEach(a=>a.addEventListener('click',e=>{const id=a.getAttribute('href'); if(!id?.startsWith('#')) return; const el=$(id); if(!el) return; e.preventDefault(); el.scrollIntoView({behavior:'smooth'});}));
+
+    // progress bar
+    const progress=$('#progress'); const onProg=()=>{const h=document.documentElement;const pct=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100;progress.style.width=pct+'%';};
+    addEventListener('scroll',onProg,{passive:true}); onProg();
+
+    // canvases: waves and stars
+    (()=>{const cw=$('#waves');const cs=$('#stars');const w=cw.getContext('2d');const s=cs.getContext('2d');
+      const fit=()=>{cw.width=innerWidth; cw.height=innerHeight; cs.width=innerWidth; cs.height=innerHeight;}; fit(); addEventListener('resize',fit);
+      // stars
+      const stars=[]; for(let i=0;i<200;i++){stars.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.8+.2,vx:Math.random()*.4-.2,vy:Math.random()*.4-.2,tw:Math.random()*1});}
+      // waves
+      let t=0;
+      function tick(){
+        // stars
+        s.clearRect(0,0,cs.width,cs.height);
+        for(const p of stars){p.x+=p.vx;p.y+=p.vy;p.tw+=.02;if(p.x<0||p.x>innerWidth)p.vx*=-1;if(p.y<0||p.y>innerHeight)p.vy*=-1;
+          s.beginPath(); s.arc(p.x,p.y,p.r+Math.sin(p.tw)*.3,0,Math.PI*2); s.fillStyle='rgba(106,167,255,.6)'; s.fill();}
+        // waves
+        w.clearRect(0,0,cw.width,cw.height); t+=.008;
+        w.beginPath(); for(let x=0;x<=cw.width;x++){const y= 30*Math.sin(x*.006+t)*Math.cos(x*.004 - t) + 20*Math.cos(x*.008+t*1.3); w.lineTo(x, cw.height - 180 + y);}
+        w.lineTo(cw.width,cw.height); w.lineTo(0,cw.height); w.closePath(); w.fillStyle='rgba(79,140,255,.22)'; w.fill();
+        requestAnimationFrame(tick);
+      } tick();
+    })();
+
+    // to top
+    const topBtn=$('.to-top');
+    addEventListener('scroll',()=>{topBtn.style.display=scrollY>300?'grid':'none';},{passive:true});
+    topBtn.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+
+    // resume rail
+    (()=>{const area=$('#resume');const up=$('#scroll-up');const down=$('#scroll-down');const track=$('.track');const thumb=$('.thumb');
+      if(!area||!up||!down) return;
+      const step=()=>Math.max(200, Math.round(innerHeight*.6));
+      const move=d=>area.scrollBy({top:d,behavior:'smooth'});
+      up.addEventListener('click',()=>move(-step())); down.addEventListener('click',()=>move(step()));
+      const sync=()=>{const max=area.scrollHeight-area.clientHeight;const pct=max>0?area.scrollTop/max:0;const free=track.clientHeight-thumb.clientHeight;thumb.style.transform=`translateY(${free*pct}px)`;};
+      area.addEventListener('scroll',sync,{passive:true}); addEventListener('resize',sync); sync();
+    })();
+
+    // resume controls with animated overlay
+    (()=>{const area=$('#resume'); const start=$('#start'); const pause=$('#pause'); const resumeBtn=$('#resumeBtn'); let timer=null, paused=false, showing=false;
+      function startAuto(){ if(timer) return; area.scrollTop=0; timer=setInterval(()=>{area.scrollTop+=1; if(area.scrollTop>=area.scrollHeight-area.offsetHeight){clearInterval(timer); timer=null;}}, 18); }
+      function pauseAuto(){ clearInterval(timer); timer=null; paused=true; }
+      function resumeAuto(){ if(paused){ paused=false; startAuto(); } }
+      function wordOverlay(){
+        if(showing) return; showing=true;
+        const text=area.innerText.trim();
+        const overlay=document.createElement('div');
+        /* CONTINUE FROM HERE AS YOU ASKED */
+        overlay.style.position='absolute'; overlay.style.inset='20px'; overlay.style.pointerEvents='none'; overlay.style.whiteSpace='pre-wrap'; overlay.style.background='transparent'; overlay.style.opacity='0';
+        overlay.style.lineHeight='1.7';
+        overlay.style.fontWeight='600';
+        overlay.style.filter='drop-shadow(0 2px 10px rgba(0,0,0,.25))';
+        const parent=area; parent.style.position='relative'; parent.appendChild(overlay);
+        const words=text.split(/\s+/);
+        let html='';
+        for(let i=0;i<words.length;i++){
+          const delay=(i*0.010).toFixed(3);
+          html+=`<span style="opacity:0;display:inline-block;transform:translateY(10px) scale(.98);transition:opacity .26s ease ${delay}s, transform .26s ease ${delay}s">${words[i]} </span>`;
+        }
+        overlay.innerHTML=html;
+        requestAnimationFrame(()=>{
+          overlay.style.opacity='1';
+          overlay.querySelectorAll('span').forEach(s=>{
+            s.style.opacity='1';
+            s.style.transform='translateY(0) scale(1)';
+          });
+        });
+        const endTime=Math.min(5200, words.length*12+1200);
+        setTimeout(()=>{overlay.remove(); showing=false;}, endTime);
+      }
+      start.addEventListener('click',()=>{area.scrollTop=0; startAuto(); wordOverlay();});
+      pause.addEventListener('click',pauseAuto);
+      resumeBtn.addEventListener('click',resumeAuto);
+    })();
+
+    // download resume
+    $('#download-resume').addEventListener('click',()=>{const a=document.createElement('a'); a.href='/doc/resume/Emmanuel_Ahishakiye_Resume.pdf'; a.download='Emmanuel_Ahishakiye_Resume.pdf'; document.body.appendChild(a); a.click(); a.remove();});
+
+    // contact form send: try EmailJS if present else mailto fallback
+    (()=>{const f=$('#contact-form'), t=$('#thanks');
+      f.addEventListener('submit',async e=>{
+        e.preventDefault();
+        const name=$('#name').value.trim(); const email=$('#email').value.trim(); const msg=$('#message').value.trim();
+        // EmailJS if loaded
+        try{
+          if(window.emailjs && emailjs.send){
+            // replace with your ids if you have them
+            await emailjs.send('service_id','template_id',{from_name:name,from_email:email,message:msg,to_email:'eahishak@u.rochester.edu'});
+            f.reset(); t.style.display='block'; setTimeout(()=>t.style.display='none', 5000);
+            return;
+          }
+        }catch(err){}
+        // mailto fallback
+        const body=encodeURIComponent(`From: ${name} <${email}>\n\n${msg}`);
+        window.location.href=`mailto:eahishak@u.rochester.edu?subject=New message from ${encodeURIComponent(name)}&body=${body}`;
+        f.reset(); t.style.display='block'; setTimeout(()=>t.style.display='none', 5000);
+      });
+    })();
+
+    // Magic lab
+    const lab=$('#lab'); const labToggle=$('#labToggle'); const labClose=$('#labClose'); const openLab=()=>lab.classList.add('open'); const closeLab=()=>lab.classList.remove('open');
+    labToggle.addEventListener('click',openLab); $('#openLab')?.addEventListener('click',openLab); $('#openLab2')?.addEventListener('click',openLab); labClose.addEventListener('click',closeLab);
+    addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault(); lab.classList.toggle('open');}});
+
+    // tabs
+    $$('.tab').forEach(t=>t.addEventListener('click',()=>{$$('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); $$('.pane').forEach(p=>p.classList.remove('active')); $('#pane-'+t.dataset.tab).classList.add('active');}));
+
+    // helper actions
+    const helperOut=$('#helperOut');
+    const resumeText=()=>$('#resume')?.innerText||'';
+    const actions={
+      pitch(){ helperOut.textContent='Emmanuel builds useful software and leads teams with speed and care. Clear results. Simple delivery.'; },
+      summary(){ const text=resumeText().slice(0,24000); const s=text.split(/(?<=[.?!])\s+/).filter(Boolean);
+        const words=(text.toLowerCase().match(/[a-z0-9]+/g)||[]); const freq={}; words.forEach(w=>freq[w]=(freq[w]||0)+1);
+        const score=s.map(line=>({line,score:(line.toLowerCase().match(/[a-z0-9]+/g)||[]).reduce((a,w)=>a+(freq[w]||0),0)}))
+                      .sort((a,b)=>b.score-a.score).slice(0,Math.max(3,Math.floor(s.length*0.12))).map(x=>x.line).join(' ');
+        helperOut.textContent=score||'I made a brief note.'; },
+      keywords(){ const text=resumeText().toLowerCase(); const ts=(text.match(/[a-z0-9]+/g)||[]).filter(w=>w.length>3);
+        const stop=new Set('with from this that have into your been their about there which will were them then they also just over more only very than into across while where when what make made such many much some each per you for the and are was but not out our who his her its can able'.split(' '));
+        const tf={}; ts.forEach(w=>tf[w]=(tf[w]||0)+1); const top=Object.entries(tf).filter(([w])=>!stop.has(w)).sort((a,b)=>b[1]-a[1]).slice(0,18).map(([w])=>w).join(', ');
+        helperOut.textContent=top; },
+      copy(){ const contact=$('.resume-content p:nth-of-type(2)')?.innerText||''; navigator.clipboard?.writeText(contact); helperOut.textContent='Contact copied'; },
+      read(){ const s=window.speechSynthesis; if(!s){helperOut.textContent='Voice not available'; return;}
+        const u=new SpeechSynthesisUtterance(resumeText().slice(0,900)); u.rate=1.05; s.cancel(); s.speak(u); helperOut.textContent='Reading out loud'; }
+    };
+    $$('#pane-helper .pill').forEach(b=>b.addEventListener('click',()=>{const act=b.dataset.action; actions[act]?.();}));
+
+    // about me generator
+    const aboutGen=()=>{const t=resumeText().toLowerCase(); const cue=t.includes('foundly')?'Foundly':'products';
+      $('#aboutOut').textContent = `I enjoy building things people use every day. Small details, quick feedback, steady delivery. Right now my time goes to ${cue} and to mentoring builders.`;
+    };
+    aboutGen(); $('#aboutRefresh').addEventListener('click',aboutGen);
+
+    // company chat using page text
+    const chatLog=$('#chatLog'); const chatInput=$('#chatInput'); const chatSend=$('#chatSend');
+    const sourceText=()=>document.body.cloneNode(true).innerText.toLowerCase();
+    function chatAnswer(q){
+      const t=sourceText(); const ask=q.toLowerCase();
+      // simple keyword buckets
+      if(ask.includes('foundly')) return 'Foundly is a platform for lost and found across campuses and offices with smart matching and quick notices. Link at foundlyhq.com.';
+      if(ask.includes('jackal')) return 'Jackal Tech builds software and training for schools, teams, and communities with a focus on clear value and delivery. Link at jackaltechltd.com.';
+      if(ask.includes('who')&&ask.includes('you')) return 'Emmanuel is a builder and student at the University of Rochester working on products and helpful tools.';
+      // fuzzy excerpt
+      const idx=t.indexOf(ask.split(' ').slice(0,2).join(' '));
+      if(idx>-1){const s=Math.max(0,idx-220), e=Math.min(t.length, idx+220); return document.body.innerText.slice(s,e);}
+      return 'Here is what I know. Emmanuel leads Jackal Tech and builds Foundly with clear goals and clean tools.';
+    }
+    function addMsg(who,msg){const el=document.createElement('div'); el.style.margin='6px 0'; el.innerHTML=`<b>${who}:</b> ${msg}`; chatLog.appendChild(el); chatLog.scrollTop=chatLog.scrollHeight;}
+    chatSend.addEventListener('click',()=>{const q=chatInput.value.trim(); if(!q) return; addMsg('You', q); const a=chatAnswer(q); addMsg('Helper', a); chatInput.value='';});
+    
+    
+
+    // Game studio
+    const showGame=(id)=>{['guessWord','number','rps','tic','memory','reaction','typing'].forEach(g=>$('#game-'+g).style.display='none'); $('#game-'+id).style.display='block';};
+    $$('#pane-games .pill').forEach(p=>p.addEventListener('click',()=>showGame(p.dataset.g)));
+
+    // Guess word
+    (()=>{const list=['product','systems','python','react','django','node','maps','matching','training','deploy','mentor','design','search','alerts','resume','contact','teams','mobile','school','campus'];
+      let secret='', tries=0; const out=$('#gwOut'), inp=$('#gwIn');
+      const newRound=()=>{secret=list[Math.floor(Math.random()*list.length)]; tries=0; out.textContent='New word ready. Guess a word from the work areas.'; inp.value='';};
+      $('#gwNew').addEventListener('click',newRound);
+      inp.addEventListener('keydown',e=>{if(e.key!=='Enter') return; const g=inp.value.trim().toLowerCase(); if(!g) return; tries++;
+        if(g===secret){ out.textContent=`Nice. You got it in ${tries}.`; newRound(); } else { out.textContent = g<secret ? 'Later in the alphabet' : 'Earlier in the alphabet'; }
+      });
+      newRound();
+    })();
+
+    // Number guess
+    (()=>{let target=0, tries=0; const out=$('#numOut'), inp=$('#numIn');
+      const newRound=()=>{target=Math.floor(Math.random()*100)+1; tries=0; out.textContent='Pick a number one to one hundred'; inp.value='';};
+      $('#numNew').addEventListener('click',newRound);
+      inp.addEventListener('keydown',e=>{if(e.key!=='Enter') return; const v=parseInt(inp.value,10); if(isNaN(v)) return; tries++;
+        out.textContent = v===target ? `Good. You found ${v} in ${tries}.` : (v<target?'Higher':'Lower');
+        if(v===target) newRound();
+      });
+      newRound();
+    })();
+
+    // RPS
+    (()=>{const out=$('#rpsOut'); $$('#game-rps [data-move]').forEach(b=>b.addEventListener('click',()=>{
+      const you=b.dataset.move; const ops=['rock','paper','scissors']; const bot=ops[Math.floor(Math.random()*3)];
+      const win=(you==='rock'&&bot==='scissors')||(you==='paper'&&bot==='rock')||(you==='scissors'&&bot==='paper');
+      const draw=you===bot;
+      out.textContent = draw ? `Draw. Both ${you}.` : win ? `You win. ${you} beats ${bot}.` : `You lose. ${bot} beats ${you}.`;
+    }));})();
+
+    // Tic tac toe
+    (()=>{const board=$('#ticBoard'), out=$('#ticOut'); let cells=[], turn='X', done=false;
+      function check(){
+        const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+        for(const [a,b,c] of w){if(cells[a].textContent&&cells[a].textContent===cells[b].textContent&&cells[a].textContent===cells[c].textContent){done=true; out.textContent=`${cells[a].textContent} wins`; return;}}
+        if(!cells.some(c=>!c.textContent)){done=true; out.textContent='Draw';}
+      }
+      function move(i){
+        if(done||cells[i].textContent) return;
+        cells[i].textContent=turn;
+        cells[i].style.background='rgba(127,87,255,.18)';
+        check(); turn=turn==='X'?'O':'X';
+        if(!done&&turn==='O'){ // simple bot
+          const empty=cells.map((c,i)=>[c,i]).filter(([c])=>!c.textContent).map(x=>x[1]);
+          const idx=empty[Math.floor(Math.random()*empty.length)]; move(idx);
+        }
+      }
+      function build(){
+        board.innerHTML=''; cells=[];
+        for(let i=0;i<9;i++){const b=document.createElement('button'); b.className='btn-ghost'; b.style.width='64px'; b.style.height='64px'; b.style.fontSize='20px'; b.addEventListener('click',()=>move(i)); board.appendChild(b); cells.push(b);}
+        out.textContent='Your turn'; turn='X'; done=false;
+      }
+      $('#ticNew').addEventListener('click',build); build();
+    })();
+
+    // Memory match
+    (()=>{const board=$('#memBoard'), out=$('#memOut'); let tiles=[], pick=[], lock=false, found=0;
+      function make(){
+        board.innerHTML=''; tiles=[]; pick=[]; lock=false; found=0; out.textContent='Find pairs';
+        const icons=['🍃','⭐','🔥','💎','⚙️','📦','🧭','📚','🎯','🧠','🛰️','🚀'];
+        const deck=[...icons.slice(0,12),...icons.slice(0,12)].sort(()=>Math.random()-.5);
+        deck.forEach((v,i)=>{const btn=document.createElement('button'); btn.className='btn-ghost'; btn.dataset.v=v; btn.textContent='?'; btn.style.width='48px'; btn.style.height='48px';
+          btn.addEventListener('click',()=>flip(btn)); board.appendChild(btn); tiles.push(btn);});
+      }
+      function flip(b){
+        if(lock||b.textContent!=='?') return; b.textContent=b.dataset.v; pick.push(b);
+        if(pick.length===2){lock=true; setTimeout(()=>{const[a,b]=pick; if(a.dataset.v===b.dataset.v){a.disabled=b.disabled=true; found+=1; if(found===12) out.textContent='Nice. All found.';}
+          else{a.textContent='?'; b.textContent='?';} pick=[]; lock=false;}, 550);}
+      }
+      $('#memNew').addEventListener('click',make); make();
+    })();
+
+    // Reaction time
+    (()=>{const area=$('#reactArea'), out=$('#reactOut'); let waiting=false, start=0, timer=null;
+      function arm(){waiting=true; out.textContent='Wait for green'; area.style.background='#9b2a2a'; timer=setTimeout(()=>{area.style.background='#1b612d'; area.textContent='Click'; start=performance.now();}, 700+Math.random()*1200);}
+      function reset(){area.style.background=''; area.textContent='Click when it turns green'; waiting=false; clearTimeout(timer);}
+      area.addEventListener('click',()=>{ if(area.style.background==='rgb(27, 97, 45)'){const t=performance.now()-start; out.textContent=`Time ${Math.round(t)} ms`; reset();}
+        else {out.textContent='Too soon'; reset(); }});
+      $('#reactNew').addEventListener('click',arm); arm();
+    })();
+
+    // Typing speed
+    (()=>{const prompts=['Shipping small updates beats waiting for perfect','Clear inputs fast outputs trust in the middle','Make it simple then make it solid then make it fast']; let p='', start=0;
+      const area=$('#typeIn'), out=$('#typeOut'), show=$('#typePrompt');
+      function newS(){p=prompts[Math.floor(Math.random()*prompts.length)]; show.textContent=p; area.value=''; out.textContent=''; start=performance.now();}
+      area.addEventListener('keydown',e=>{if(e.key!=='Enter') return; const t=performance.now()-start; const chars=p.length; const wpm=Math.round((chars/5)/(t/60000)); out.textContent=`About ${wpm} words per minute`; newS();});
+      $('#typeNew').addEventListener('click',newS); newS();
+    })();
+
+    // tools
+    $('#printPdf').addEventListener('click',()=>window.print());
+    let voiceOn=false, recog;
+    $('#voice').addEventListener('click',()=>{ if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)){alert('Voice not supported here'); return;}
+      if(voiceOn){recog.stop(); voiceOn=false; return;}
+      const SR=window.SpeechRecognition||window.webkitSpeechRecognition; recog=new SR(); recog.lang='en-US'; recog.continuous=true;
+      recog.onresult=e=>{const t=e.results[e.results.length-1][0].transcript.toLowerCase();
+        if(t.includes('top')) scrollTo({top:0,behavior:'smooth'});
+        if(t.includes('resume')) $('#resume-section').scrollIntoView({behavior:'smooth'});
+        if(t.includes('contact')) $('#contact').scrollIntoView({behavior:'smooth'});
+        if(t.includes('open lab')) lab.classList.add('open');
+      };
+      recog.start(); voiceOn=true;
+    });
+    $('#offline').addEventListener('click',()=>{ if('serviceWorker' in navigator){
+      const code=`self.addEventListener('install',e=>{e.waitUntil(caches.open('em-cache-v1').then(c=>c.addAll(['./'])))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))})`;
+      const blob=new Blob([code],{type:'text/javascript'}); const url=URL.createObjectURL(blob); navigator.serviceWorker.register(url).then(()=>alert('Offline ready'));
+    } else { alert('Offline not supported here'); } });
+
+    // auto animate interests reveal
+    $$('section').forEach(sec=>{sec.style.opacity='0';sec.style.transition='opacity 0.8s ease';});
+    new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';}})}, {threshold:.15}).observe($('#home'));
+    $$('section').forEach(s=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';}}),{threshold:.15}).observe(s));
+  </script>
+  
+  <script>
+// company chat using page text
+const chatLog = $('#chatLog');
+const chatInput = $('#chatInput');
+const chatSend = $('#chatSend');
+
+const sourceText = () => document.body.cloneNode(true).innerText.toLowerCase();
+
+function addMsg(who, msg) {
+  const el = document.createElement('div');
+  el.style.margin = '6px 0';
+  el.innerHTML = `<b>${who}:</b> ${msg}`;
+  chatLog.appendChild(el);
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+
+const links = {
+  jackal: `<a href="https://www.jackaltechltd.com" target="_blank" rel="noopener">jackaltechltd.com</a>`,
+  foundly: `<a href="https://www.foundlyhq.com" target="_blank" rel="noopener">foundlyhq.com</a>`,
+  calendly: `<a href="https://calendly.com/eahishak" target="_blank" rel="noopener">book a time</a>`,
+  email: `<a href="mailto:eahishak@u.rochester.edu">eahishak@u.rochester.edu</a>`,
+  linkedin: `<a href="https://www.linkedin.com/in/eahishak/" target="_blank" rel="noopener">LinkedIn</a>`,
+  github: `<a href="https://github.com/eahishak" target="_blank" rel="noopener">GitHub</a>`
+};
+
+function chatAnswer(q) {
+  const ask = (q || '').toLowerCase().trim();
+
+  // quick greetings and help
+  if (/^(hi|hello|hey)\b/.test(ask)) {
+    return `Hello. Ask about Jackal Tech, Foundly, or Emmanuel. Try for example founders of Jackal Tech, what is Foundly, features of Foundly, schedule a chat, or contact.`;
+  }
+  if (/\bhelp\b|\bwhat can you do\b/.test(ask)) {
+    return `You can ask about companies, founders, products, features, websites, studies, skills, support, pricing, setup, or play with the Game studio.`;
+  }
+
+  // founders
+  if (/founder[s]? of jackal|who (started|created) jackal/.test(ask)) {
+    return `Founders of Jackal Tech are Emmanuel Ahishakiye, Ignace Kwizera, and Placide Shema. Learn more at ${links.jackal}.`;
+  }
+  if (/founder[s]? of foundly|who (started|created) foundly/.test(ask)) {
+    return `Founders of Foundly are Emmanuel Ahishakiye and Israel Owolabi. Visit ${links.foundly}.`;
+  }
+  if (/who is emmanuel|who are you|about emmanuel/.test(ask)) {
+    return `Emmanuel Ahishakiye is a builder and student at the University of Rochester studying Computer Science and Business. He leads Jackal Tech and works on Foundly. ${links.linkedin} • ${links.github}.`;
+  }
+
+  // what they do
+  if (/what (does|do) jackal( tech)? (do|build|make)|jackal overview|about jackal/.test(ask)) {
+    return `Jackal Tech builds software and training programs for schools, teams, and communities with a focus on dependable delivery and clear value. Site ${links.jackal}.`;
+  }
+  if (/what (is|does) foundly|about foundly|foundly overview/.test(ask)) {
+    return `Foundly is a platform for lost and found across campuses and offices. It offers smart matching, instant notices, and clean dashboards for staff and users. Site ${links.foundly}.`;
+  }
+
+  // features and tech
+  if (/foundly feature|what (can|does) foundly (do|offer)|foundly capabilities/.test(ask)) {
+    return `Key features of Foundly
+    • Smart item matching
+    • Sign in with Google and support for institutional mail
+    • Dashboards for staff and users
+    • Maps with search and geolocation
+    • Alerts and status updates
+    • Simple claim review
+    Read more at ${links.foundly}.`;
+  }
+  if (/tech stack|stack|what (is|are) the technologies/.test(ask)) {
+    return `Projects use React and Node.js with Firebase and Python services. Matching uses TensorFlow. Jackal Tech also ships with Django and PostgreSQL where it fits.`;
+  }
+
+  // outcomes and metrics
+  if (/impact|results|metrics|numbers|how many users/.test(ask)) {
+    return `Foundly serves more than fifteen thousand users. Maps support increased match rates by sixty five percent and alerts reduced manual work by seventy percent.`;
+  }
+
+  // setup and pricing
+  if (/how to (get|start)|setup|integration|onboard|pilot/.test(ask)) {
+    return `Pick a pilot scope and location, connect your mail and sign in, add staff, and post your first item. We can walk you through a short setup call. You can ${links.calendly}.`;
+  }
+  if (/price|pricing|cost|subscription/.test(ask)) {
+    return `Pricing depends on size and support. Campus, office, and multi site plans are available. Tell us about your team and we will share a quote. Contact ${links.email}.`;
+  }
+
+  // security and privacy
+  if (/security|privacy|data|gdpr|ferpa|hipaa/.test(ask)) {
+    return `Data is scoped to each organization. Access is role based. Sign in supports Google. Items and claims can be removed on request. Ask about audits at ${links.email}.`;
+  }
+
+  // support
+  if (/support|contact|email|reach out|help desk/.test(ask)) {
+    return `Write to ${links.email} or ${links.calendly}. We reply as soon as possible.`;
+  }
+
+  // education and background
+  if (/university|study|major|degree|rochester/.test(ask)) {
+    return `Emmanuel studies Computer Science and Business at the University of Rochester.`;
+  }
+  if (/skills|languages|frameworks/.test(ask)) {
+    return `Skills include Python, Java, JavaScript, TypeScript, React, Django, Node.js, FastAPI, PostgreSQL, MySQL, Firebase, and TensorFlow.`;
+  }
+
+  // use cases
+  if (/who uses|use case|campus|office|university|school/.test(ask)) {
+    return `Common use cases
+    • Campus lost and found desks
+    • Offices and coworking spaces
+    • Events with many visitors
+    • City facilities and libraries`;
+  }
+
+  // how it works
+  if (/how (it|does it) work|workflow|process/.test(ask)) {
+    return `Post a found or lost item. The system suggests matches. Staff review and notify the owner. Claims are tracked to closure with clear status.`;
+  }
+
+  // timeline and roadmap
+  if (/roadmap|next|coming|future/.test(ask)) {
+    return `Focus areas include smoother mobile flows, better reports, and richer bulk imports for large sites.`;
+  }
+
+  // jobs and internships
+  if (/hire|hiring|intern|job|career/.test(ask)) {
+    return `If you enjoy building clean products and helping users, send a short note with links to ${links.email}.`;
+  }
+
+  // meeting and demo
+  if (/demo|meeting|schedule|call|zoom|google meet/.test(ask)) {
+    return `Book a short demo here ${links.calendly}.`;
+  }
+
+  // links
+  if (/link|website|sites|urls/.test(ask)) {
+    return `Links
+    • Jackal Tech ${links.jackal}
+    • Foundly ${links.foundly}
+    • Email ${links.email}
+    • Calendar ${links.calendly}
+    • ${links.linkedin}
+    • ${links.github}`;
+  }
+
+  // founders checks by name
+  if (/ignace|kwizera/.test(ask)) {
+    return `Ignace Kwizera is one of the founders of Jackal Tech.`;
+  }
+  if (/placide|shema/.test(ask)) {
+    return `Placide Shema is one of the founders of Jackal Tech.`;
+  }
+  if (/israel|owolabi/.test(ask)) {
+    return `Israel Owolabi is one of the founders of Foundly.`;
+  }
+
+  // fallback from page text
+  const t = sourceText();
+  const key = ask.split(' ').slice(0, 2).join(' ');
+  const idx = t.indexOf(key);
+  if (idx > -1) {
+    const s = Math.max(0, idx - 220), e = Math.min(t.length, idx + 220);
+    return document.body.innerText.slice(s, e);
+  }
+  return `Here is what I know. Emmanuel leads Jackal Tech and builds Foundly. Ask about founders, features, setup, or schedule a chat.`;
+}
+
+chatSend.addEventListener('click', () => {
+  const q = chatInput.value.trim();
+  if (!q) return;
+  addMsg('You', q);
+  const a = chatAnswer(q);
+  addMsg('Helper', a);
+  chatInput.value = '';
+});
+
+chatInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    chatSend.click();
+  }
+});
+</script>
+
+</body>
+</html>
