@@ -1,0 +1,12 @@
+RewriteEngine On
+
+RewriteRule ^$ frontend/public/ [L]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteCond %{REQUEST_URI} !^/frontend/public/
+RewriteRule ^(.*)$ frontend/public/$1 [L]
+
+DirectoryIndex frontend/public/index.html
